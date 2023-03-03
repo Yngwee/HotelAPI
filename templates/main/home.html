@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block h1_title %}<h1>Главная страница</h1>{% endblock %}
+{% block main %}
+    <div class="aside"></div>
+    <aside>
+        <form action="{% url "home" %}">
+            <fieldset>
+                <legend>Фильтры:</legend>
+                <label for="price_filter">От: <span id="price_value"></span></label><br>
+                <input type="text" id="price_filter" name="price_filter" min="{{ min_price }}", max="{{ max_price }}" value="1000" required><br>
+                <label for="username">Логин:</label>
+                <input type="text" id="username" name="username" required><br>
+            </fieldset>
+            <fieldset>
+                <legend>Количество мест</legend>
+                <input type="radio" name="seats" value="1-3" id="seats-1-3">
+                <label for="seats-1-3">1-3</label>
+                <input type="radio" name="seats" value="4-6" id="seats-4-6">
+                <label for="seats-4-6">4-6</label>
+                <input type="radio" name="seats" value="7-9" id="seats-7-9">
+                <label for="seats-7-9">7-9</label>
+            </fieldset>
+            <button type="submit">Применить</button>
+        </form>
+    </aside>
+    <script>
+        const priceFilter = document.getElementById('price_filter'); // Получаем элемент input
+        const priceValue = document.getElementById('price_value'); // Получаем элемент span
+
+        priceFilter.addEventListener('input', () => { // Добавляем обработчик события input
+            priceValue.textContent = priceFilter.value; // Обновляем значение span
+        });
+    </script>
+{% endblock %}

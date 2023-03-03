@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'login/auth_style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/main.css' %}">
+</head>
+<header>
+  <div class="logo">
+    <a href="{% url 'home' %}">Hotel</a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">О нас</a></li>
+      <li><a href="#">Контакты</a></li>
+      <li><a href="#">Блог</a></li>
+      <li><a href="{% url 'login' %}">Войти</a></li>
+      <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
+    </ul>
+  </nav>
+</header>
+<body>
+{% block h1_title %}<h1>Авторизация</h1>{% endblock %}
+{% block auth %}{% endblock %}
+{% block main %}{% endblock %}
+</body>
+</html>
