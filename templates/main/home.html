@@ -12,26 +12,36 @@
             <h3>Фильтровать по:</h3>
             <h4>Цене:</h4>
             <label for="price_filter_from">От: <span id="price_value"></span></label>
-            <input type="text" id="price_filter_from" name="price_filter_from" min="1000" max="100000"
-                   placeholder="1000">
+            {% if from %}
+                <input type="text" id="price_filter_from" name="price_filter_from" min="1000" max="100000"
+                       value="{{ from }}" placeholder="1000" pattern="\d+">
+            {% else %}
+                <input type="text" id="price_filter_from" name="price_filter_from" min="1000" max="100000"
+                       placeholder="1000" pattern="\d+">
+            {% endif %}
             <label for="price_filter_to">До: <span id="price_value"></span></label>
-            <input type="text" id="price_filter_to" name="price_filter_to" min="1000" max="100000"
-                   placeholder="100000"><br>
+            {% if to %}
+                <input type="text" id="price_filter_to" name="price_filter_to" min="1000" max="100000"
+                       value="{{ to }}" placeholder="100000" pattern="\d+"><br>
+            {% else %}
+                <input type="text" id="price_filter_to" name="price_filter_to" min="1000" max="100000"
+                       placeholder="100000" pattern="\d+"><br>
+            {% endif %}
             <h4>Количеству комнат:</h4>
             <div>
-                <input type="checkbox" id="cap-1" name="cap" value="1">
+                <input type="checkbox" id="cap-1" name="cap" value="1" class="checkbox">
                 <label for="cap-1"> 1 </label>
             </div>
             <div>
-                <input type="checkbox" id="cap-2" name="cap" value="2">
+                <input type="checkbox" id="cap-2" name="cap" value="2" class="checkbox">
                 <label for="cap-2"> 2 </label>
             </div>
             <div>
-                <input type="checkbox" id="cap-3" name="cap" value="3">
+                <input type="checkbox" id="cap-3" name="cap" value="3" class="checkbox">
                 <label for="cap-3"> 3 </label>
             </div>
             <div>
-                <input type="checkbox" id="cap-4" name="cap" value="4">
+                <input type="checkbox" id="cap-4" name="cap" value="4" class="checkbox">
                 <label for="cap-4"> 4+ </label>
             </div>
 
@@ -47,13 +57,16 @@
             </select>
             <button type="submit">Применить</button>
         </form>
+    {% if request.user.is_authenticate %}
+        <h1>{{ request.user.username }}</h1>
+        {% else %}
+        <h1>NOT AUTH</h1>
+    {% endif %}
     </aside>
-
 
     {% if num_rooms == 0 %}
         <p>Комнат нет</p>
     {% else %}
-
         {% for room in rooms %}
             <div class="room-blocks">
                 <div class="room-block">
@@ -67,11 +80,39 @@
         {% endfor %}
     {% endif %}
     <script>
-        const priceFilter = document.getElementById('price_filter'); // Получаем элемент input
-        const priceValue = document.getElementById('price_value'); // Получаем элемент span
+    // Функция для сохранения состояния чекбоксов в localStorage
+    function saveCheckboxes() {
+        const checkboxes = document.querySelectorAll('.checkbox');
+        const values = [];
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                values.push(checkboxes[i].value);
+            }
+        }
+        localStorage.setItem('checkboxes', JSON.stringify(values));
+    }
 
-        priceFilter.addEventListener('input', () => { // Добавляем обработчик события input
-            priceValue.textContent = priceFilter.value; // Обновляем значение span
-        });
-    </script>
+    // Функция для восстановления состояния чекбоксов из localStorage
+    function restoreCheckboxes() {
+        const values = JSON.parse(localStorage.getItem('checkboxes'));
+        if (values) {
+            for (let i = 0; i < values.length; i++) {
+                const checkbox = document.querySelector(`.checkbox[value="${values[i]}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            }
+        }
+    }
+
+    // Сохраняем состояние чекбоксов при изменении состояния
+    const checkboxes = document.querySelectorAll('.checkbox');
+    for (let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('change', saveCheckboxes);
+    }
+
+    // Восстанавливаем состояние чекбоксов при загрузке страницы
+    restoreCheckboxes();
+</script>
+
 {% endblock %}

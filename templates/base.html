@@ -8,18 +8,28 @@
     {% block links %}{% endblock %}
 </head>
 <header>
-  <div class="logo">
-    <a href="{% url 'home' %}">Hotel</a>
-  </div>
-  <nav>
-    <ul>
-      <li><a href="{% url 'login' %}">Войти</a></li>
-      <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
-    </ul>
-  </nav>
+    <div class="logo">
+        <a href="{% url 'home' %}">Hotel</a>
+    </div>
+    {% block nav %}
+        {% if s %}
+            <h2></h2>
+            <ul>
+                <li><a href="{% url 'logout' %}">Выйти</a></li>
+            </ul>
+        {% else %}
+            <nav>
+                <ul>
+                    <li></li>
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+    {% endblock %}
 </header>
 <body>
-{% block h1_title %}<h1>Авторизация</h1>{% endblock %}
+{% block h1_title %}{% endblock %}
 {% block auth %}{% endblock %}
 {% block main %}{% endblock %}
 {% block content %}{% endblock %}
