@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0005_remove_room_isbooked_bookingroom'),
+        ('server', '0005_remove_room_isbooked_bookingroom'),
     ]
 
     operations = [
@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('bookedDate', models.DurationField()),
-                ('bookedRoomId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.room')),
-                ('userId', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='login.user')),
+                ('bookedRoomId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='server.room')),
+                ('userId', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='server.user')),
             ],
         ),
         migrations.DeleteModel(

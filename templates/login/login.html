@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block auth %}
-    <form action="/login" method="post">
+    <form action="login/" method="post">
     {% csrf_token %}
     <label for="username">Логин:</label>
     <input type="text" id="username" name="username" required><br>
@@ -9,7 +9,6 @@
     <input type="password" id="password" name="password" required><br>
 
     <input type="submit" value="Войти">
-{#    <input type="button" value="Регистрация" href="{% url 'registration' %}" required>#}
-    <button type="button" onclick="window.location.href='{% url 'registration' %}'"}>Регистрация</button>
+    <button type="button" onclick="window.location.href='{% url 'registration' %}'">Регистрация</button>
 </form>
 {% endblock %}

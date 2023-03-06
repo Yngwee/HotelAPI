@@ -1,9 +1,9 @@
 aside {
     position: fixed; /* Делаем меню фиксированным */
-    top: 200px;
+    top: 100px;
     left: 0;
     bottom: 0;
-    width: 250px;
+    width: 100px;
     background-color: #f1f1f1;
     padding: 20px;
 }
@@ -11,22 +11,12 @@ aside {
 h3 {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 
 form {
     margin-bottom: 20px;
-}
-
-fieldset {
-    border: none;
-    margin-bottom: 10px;
-}
-
-legend {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
+    width: 200px;
 }
 
 label {
@@ -47,6 +37,77 @@ button[type="submit"]:hover {
     background-color: #3e8e41;
 }
 
-input[type="radio"] {
+#sort {
+    width: 200px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+#sort option {
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+}
+
+#sort option[value="-number"]:hover,
+#sort option[value="-price"]:hover {
+    font-weight: bold;
+}
+
+input[type='checkbox'] + label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+div {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type='checkbox'] + label:before {
+    content: "\2714";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
     margin-right: 5px;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+input[type="checkbox"]:checked + label:before {
+    content: "\2713";
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.room-blocks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.room-block {
+    background-color: wheat;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 20px;
+    margin: 10px;
+    max-width: 400px; /* опционально, чтобы ограничить ширину блока */
+    text-align: center;
 }

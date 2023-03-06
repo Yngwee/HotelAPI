@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="{% static 'login/auth_style.css' %}">
-    <link rel="stylesheet" href="{% static 'main/main.css' %}">
+    {% block links %}{% endblock %}
 </head>
 <header>
   <div class="logo">
@@ -13,9 +13,6 @@
   </div>
   <nav>
     <ul>
-      <li><a href="#">О нас</a></li>
-      <li><a href="#">Контакты</a></li>
-      <li><a href="#">Блог</a></li>
       <li><a href="{% url 'login' %}">Войти</a></li>
       <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
     </ul>
@@ -25,5 +22,6 @@
 {% block h1_title %}<h1>Авторизация</h1>{% endblock %}
 {% block auth %}{% endblock %}
 {% block main %}{% endblock %}
+{% block content %}{% endblock %}
 </body>
 </html>
