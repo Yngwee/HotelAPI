@@ -3,7 +3,7 @@
 {% block links %}
     <link rel="stylesheet" href="{% static 'main/main.css' %}">
 {% endblock %}
-{% block h1_title %}<h1>Hotel - выбор комнаты</h1>{% endblock %}
+{% block h1_title %}<h2>Hotel - выбор комнаты</h2>{% endblock %}
 {% block main %}
     <div class="aside"></div>
     <aside>
@@ -57,62 +57,67 @@
             </select>
             <button type="submit">Применить</button>
         </form>
-    {% if request.user.is_authenticate %}
-        <h1>{{ request.user.username }}</h1>
-        {% else %}
-        <h1>NOT AUTH</h1>
-    {% endif %}
     </aside>
 
     {% if num_rooms == 0 %}
-        <p>Комнат нет</p>
+        <h1>Комнат нет</h1>
     {% else %}
         {% for room in rooms %}
             <div class="room-blocks">
                 <div class="room-block">
-                    <h3>Комната №{{ room.number }}</h3>
+                    <h3>Комната {{ room.number }}</h3>
                     <h4>Количество мест: {{ room.capacity }}</h4>
                     <h4>Цена: {{ room.price }} рублей/сутки</h4>
                     <p>{{ room.description }}</p>
+                    {% if request.user.is_authenticated %}
+                        <form action="booking/" method="post">
+                            <label for="date_from"></label>
+                            <input type="date" id="date_from" name="date_from" required>
+                            <label for="date_to"></label>
+                            <input type="date" id="date_to" name="date_to" required>
+                            <button type="submit">Забронировать</button>
+                            <br>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
             <br>
         {% endfor %}
     {% endif %}
     <script>
-    // Функция для сохранения состояния чекбоксов в localStorage
-    function saveCheckboxes() {
-        const checkboxes = document.querySelectorAll('.checkbox');
-        const values = [];
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                values.push(checkboxes[i].value);
+        // Функция для сохранения состояния чекбоксов в localStorage
+        function saveCheckboxes() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const values = [];
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    values.push(checkboxes[i].value);
+                }
             }
+            localStorage.setItem('checkboxes', JSON.stringify(values));
         }
-        localStorage.setItem('checkboxes', JSON.stringify(values));
-    }
 
-    // Функция для восстановления состояния чекбоксов из localStorage
-    function restoreCheckboxes() {
-        const values = JSON.parse(localStorage.getItem('checkboxes'));
-        if (values) {
-            for (let i = 0; i < values.length; i++) {
-                const checkbox = document.querySelector(`.checkbox[value="${values[i]}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
+        // Функция для восстановления состояния чекбоксов из localStorage
+        function restoreCheckboxes() {
+            const values = JSON.parse(localStorage.getItem('checkboxes'));
+            if (values) {
+                for (let i = 0; i < values.length; i++) {
+                    const checkbox = document.querySelector(`.checkbox[value="${values[i]}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
                 }
             }
         }
-    }
 
-    // Сохраняем состояние чекбоксов при изменении состояния
-    const checkboxes = document.querySelectorAll('.checkbox');
-    for (let i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener('change', saveCheckboxes);
-    }
+        // Сохраняем состояние чекбоксов при изменении состояния
+        const checkboxes = document.querySelectorAll('.checkbox');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('change', saveCheckboxes);
+        }
 
-    // Восстанавливаем состояние чекбоксов при загрузке страницы
-    restoreCheckboxes();
-</script>
+        // Восстанавливаем состояние чекбоксов при загрузке страницы
+        restoreCheckboxes();
+    </script>
 
 {% endblock %}

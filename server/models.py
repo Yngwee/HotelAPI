@@ -1,29 +1,6 @@
+import django.utils.timezone
+
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-
-# class User(AbstractUser):
-#     pass
-
-class User(models.Model):
-    username = models.CharField(max_length=30)
-    email = models.CharField(max_length=50)
-    login = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
-    last_login = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-
-    def __str__(self):
-        return self.username
-
-
-class Token(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=40, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Room(models.Model):
@@ -35,12 +12,22 @@ class Room(models.Model):
     class Meta:
         verbose_name = 'Комната'
         verbose_name_plural = 'Комнаты'
+
     def __str__(self):
         return self.number
 
 
-
-class UserProfile(models.Model):
-    userId = models.OneToOneField(User, on_delete=models.CASCADE)
+class BoockedRoom(models.Model):
+    username = models.CharField(max_length=30)
     bookedRoomId = models.ForeignKey(Room, on_delete=models.CASCADE)
-    bookedDate = models.DurationField()
+    bookedDateFrom = models.DateField('с:', default=django.utils.timezone.now())
+    bookedDateTo = models.DateField('по:', default=django.utils.timezone.now())
+    class Meta:
+        verbose_name = 'Забронированная комната'
+        verbose_name_plural = 'Забронированные комнаты'
+
+
+    def __str__(self):
+        room = Room.objects.get(number=self.bookedRoomId)
+        print(room)
+        return f'Комната №{room.number} забронирована пользователем {self.username}'

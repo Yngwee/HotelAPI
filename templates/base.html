@@ -12,15 +12,17 @@
         <a href="{% url 'home' %}">Hotel</a>
     </div>
     {% block nav %}
-        {% if s %}
+        {% if request.user.is_authenticated %}
             <h2></h2>
-            <ul>
-                <li><a href="{% url 'logout' %}">Выйти</a></li>
-            </ul>
+            <nav>
+                <ul>
+                    <li>{{ request.user.username }}</li>
+                    <li><a href="{% url 'logout' %}">Выйти</a></li>
+                </ul>
+            </nav>
         {% else %}
             <nav>
                 <ul>
-                    <li></li>
                     <li><a href="{% url 'login' %}">Войти</a></li>
                     <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
                 </ul>
