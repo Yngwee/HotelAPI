@@ -1,9 +1,11 @@
+from datetime import date, timedelta
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.db.models import Q, QuerySet
+from django.contrib.auth import login, logout
+from django.db.models import Q
 from django.contrib.auth.models import User
-from server.models import Room, BookedRoom
+from .models import Room, BookedRoom
 
 
 def auth(request):
@@ -55,6 +57,8 @@ def registration(request):
 
 
 def home(request):
+    min_date = date.today()
+    max_date = date.today() + timedelta(days=1)
     if request.GET.get('date_from') and request.GET.get('date_to'):
         date_from = request.GET.get('date_from')
         date_to = request.GET.get('date_to')
@@ -66,7 +70,8 @@ def home(request):
         date_to = request.session['date_to']
 
     else:
-        return render(request, 'main/home.html', {'date': 'Выберите дату для поиска комнат'})
+        return render(request, 'main/home.html', {'date': 'Выберите дату для поиска комнат', 'min_date': min_date,
+                                                  'max_date': max_date})
 
     sort_by = request.GET.get('sort')
     price_from = request.GET.get('price_filter_from')
@@ -128,9 +133,6 @@ def home(request):
               'sort': sort_by, 'rooms': rooms, 'num_rooms': len(rooms), 'title': 'Главная страница', 'request': request}
 
     request.session['save_rooms'] = list(rooms.values())
-    # if date_from and date_to:
-    #     request.session['date_from'] = date_from
-    #     request.session['date_to'] = date_to
     return render(request, 'main/home.html', params)
 
 
@@ -149,7 +151,6 @@ def booking(request):
     booking_room = {}
     for key, value in request.POST.items():
         booking_room[key] = value
-    # try:
     room = Room.objects.get(number=booking_room['number_room'])
 
     room = BookedRoom.objects.create(username=request.user.username,
@@ -158,8 +159,6 @@ def booking(request):
                                      bookedRoom=room)
     print(room)
     room.save()
-    # except:
-    #     return redirect('home')
     return redirect('home')
 
 

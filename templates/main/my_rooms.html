@@ -8,7 +8,7 @@
         <h1>Комнат нет</h1>
     {% else %}
         {% for room in my_rooms %}
-            <div class="room-blocks">
+            <div class="room-blocks my-rooms">
                 <div class="room-block">
                     <h3>Комната {{ room.number }}</h3>
                     <h4>Количество мест: {{ room.capacity }}</h4>

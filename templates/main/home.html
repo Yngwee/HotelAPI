@@ -47,8 +47,8 @@
             <button type="submit">Применить</button>
         </form>
         <form action="{% url 'home' %}" method="get">
-            <label for="sort">Сортировать по:</label>
-            <select id="sort" name="sort" class="form-control">
+            <label for="filter-select">Сортировать по:</label>
+            <select id="filter-select" name="sort" class="form-control">
                 <option value="price">Цене</option>
                 <option value="-price">Цене (по убыванию)</option>
                 <option value="capacity">Количеству комнат</option>
@@ -57,20 +57,26 @@
             <button type="submit">Применить</button>
         </form>
     </aside>
-    <aside class="class-date">
+    <div class="class-date">
+        {% if not request.user.is_authenticated %}
+
+        {% endif %}
         <form action="{% url 'home' %}" method="get" class="form-date">
             {% csrf_token %}
             <div>
                 <label for="date_from"></label>
-                <input type="date" id="date_from" name="date_from" min="{{ date.today }}" required>
+                <input type="date" id="date_from" name="date_from" required>
             </div>
             <div>
                 <label for="date_to"></label>
-                <input type="date" id="date_to" name="date_to" min="{{ date.today }}" required>
+                <input type="date" id="date_to" name="date_to" required>
             </div>
             <button type="submit">Найти</button>
         </form>
-    </aside>
+    <div class="p-info">
+                <p>Для бронирования комнат необходимо авторизироваться</p>
+            </div>
+    </div>
     {% if date %}
         <div class="p-date">
             <h3>{{ date }}</h3>
@@ -90,9 +96,9 @@
                             {% csrf_token %}
                             <input type="hidden" name="number_room" value="{{ room.number }}">
                             <label for="date_from"></label>
-                            <input type="date" id="date_from" name="date_from" min="{{ date.today }}" required>
+                            <input type="date" id="date_from" name="date_from" required>
                             <label for="date_to"></label>
-                            <input type="date" id="date_to" name="date_to" min="{{ date.today }}" required>
+                            <input type="date" id="date_to" name="date_to" required>
                             <button type="submit">Забронировать</button>
                             <br>
                         </form>
@@ -137,6 +143,55 @@
         // Восстанавливаем состояние чекбоксов при загрузке страницы
         restoreCheckboxes();
 
-    </script>
+        const dateFromInputs = document.querySelectorAll('[id^="date_from"]');
+        const dateToInputs = document.querySelectorAll('[id^="date_to"]');
 
+        dateFromInputs.forEach((dateFrom, i) => {
+            const dateTo = dateToInputs[i];
+
+            // Установка минимальной даты для поля date_from
+            dateFrom.min = new Date().toISOString().split('T')[0];
+
+            // Обработчик события change для поля date_from
+            dateFrom.addEventListener('change', () => {
+                // Установка минимальной даты для поля date_to
+                dateTo.min = new Date(dateFrom.valueAsNumber + 86400000).toISOString().split('T')[0];
+            });
+        });
+
+        // Получаем элемент select с выбором параметра фильтрации
+        const filterSelect = document.getElementById('filter-select');
+
+        // Обработчик изменения выбранного параметра фильтрации
+        filterSelect.addEventListener('change', (event) => {
+            // Сохраняем выбранный параметр в localStorage
+            localStorage.setItem('selectedFilter', event.target.value);
+        });
+
+        // Устанавливаем выбранный параметр при загрузке страницы
+        const selectedFilter = localStorage.getItem('selectedFilter');
+        if (selectedFilter) {
+            filterSelect.value = selectedFilter;
+        }
+
+        const dateFrom = document.querySelector('#date_from');
+        const dateTo = document.querySelector('#date_to');
+
+        // Проверяем, есть ли значения в localStorage
+        if (localStorage.getItem('date_from')) {
+            dateFrom.value = localStorage.getItem('date_from');
+        }
+        if (localStorage.getItem('date_to')) {
+            dateTo.value = localStorage.getItem('date_to');
+        }
+
+        // Сохраняем значения в localStorage при изменении
+        dateFrom.addEventListener('change', () => {
+            localStorage.setItem('date_from', dateFrom.value);
+        });
+        dateTo.addEventListener('change', () => {
+            localStorage.setItem('date_to', dateTo.value);
+        });
+
+    </script>
 {% endblock %}
