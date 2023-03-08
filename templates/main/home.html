@@ -3,10 +3,9 @@
 {% block links %}
     <link rel="stylesheet" href="{% static 'main/main.css' %}">
 {% endblock %}
-{% block h1_title %}<h2>Hotel - выбор комнаты</h2>{% endblock %}
+{% block h1_title %}{% endblock %}
 {% block main %}
-    <div class="aside"></div>
-    <aside>
+    <aside class="filter">
         <form action="{% url 'home' %}" method="get">
             {% csrf_token %}
             <h3>Фильтровать по:</h3>
@@ -58,8 +57,25 @@
             <button type="submit">Применить</button>
         </form>
     </aside>
-
-    {% if num_rooms == 0 %}
+    <aside class="class-date">
+        <form action="{% url 'home' %}" method="get" class="form-date">
+            {% csrf_token %}
+            <div>
+                <label for="date_from"></label>
+                <input type="date" id="date_from" name="date_from" min="{{ date.today }}" required>
+            </div>
+            <div>
+                <label for="date_to"></label>
+                <input type="date" id="date_to" name="date_to" min="{{ date.today }}" required>
+            </div>
+            <button type="submit">Найти</button>
+        </form>
+    </aside>
+    {% if date %}
+        <div class="p-date">
+            <h3>{{ date }}</h3>
+        </div>
+    {% elif num_rooms == 0 %}
         <h1>Комнат нет</h1>
     {% else %}
         {% for room in rooms %}
@@ -71,10 +87,12 @@
                     <p>{{ room.description }}</p>
                     {% if request.user.is_authenticated %}
                         <form action="booking/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="number_room" value="{{ room.number }}">
                             <label for="date_from"></label>
-                            <input type="date" id="date_from" name="date_from" required>
+                            <input type="date" id="date_from" name="date_from" min="{{ date.today }}" required>
                             <label for="date_to"></label>
-                            <input type="date" id="date_to" name="date_to" required>
+                            <input type="date" id="date_to" name="date_to" min="{{ date.today }}" required>
                             <button type="submit">Забронировать</button>
                             <br>
                         </form>
@@ -118,6 +136,7 @@
 
         // Восстанавливаем состояние чекбоксов при загрузке страницы
         restoreCheckboxes();
+
     </script>
 
 {% endblock %}

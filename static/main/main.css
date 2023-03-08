@@ -1,4 +1,4 @@
-aside {
+.filter {
     position: fixed; /* Делаем меню фиксированным */
     top: 100px;
     left: 0;
@@ -11,12 +11,15 @@ aside {
 h3 {
     font-size: 20px;
     font-weight: bold;
-    /*margin-bottom: 20px;*/
+
 }
 
 form {
     margin-bottom: 20px;
     width: 200px;
+    border: none;
+    box-shadow: none;
+    background: whitesmoke;
 }
 
 label {
@@ -103,11 +106,10 @@ input[type="checkbox"]:checked + label:before {
 }
 
 .room-block {
-    background-color: wheat;
+    background-color: whitesmoke;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 0 20px;
-    margin: 10px;
     max-width: 600px; /* опционально, чтобы ограничить ширину блока */
     text-align: center;
 }
@@ -117,4 +119,31 @@ h2 {
     text-align: center;
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+.form-date {
+    display: flex;
+    margin-top: 20px;
+    position: center;
+    width: 400px;
+    height: 60px;
+    padding: 10px;
+
+}
+
+.rooms {
+  margin: 0 auto; /* устанавливаем автоматические отступы сверху и снизу, и центруем контейнер по горизонтали */
+  max-width: 800px; /* устанавливаем максимальную ширину контейнера */
+}
+
+.class-date {
+    display: flex;
+    flex-direction: column;
+    right: 0;
+
+}
+
+.p-date {
+    margin: 0 40%;
+    width: 400px;
 }

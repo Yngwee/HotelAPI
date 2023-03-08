@@ -17,6 +17,7 @@
             <nav>
                 <ul>
                     <li>{{ request.user.username }}</li>
+                    <li><a href="{% url 'my_rooms' %}">Мои комнаты</a></li>
                     <li><a href="{% url 'logout' %}">Выйти</a></li>
                 </ul>
             </nav>

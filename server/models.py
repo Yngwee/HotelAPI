@@ -17,17 +17,16 @@ class Room(models.Model):
         return self.number
 
 
-class BoockedRoom(models.Model):
+class BookedRoom(models.Model):
     username = models.CharField(max_length=30)
-    bookedRoomId = models.ForeignKey(Room, on_delete=models.CASCADE)
+    bookedRoom = models.ForeignKey(Room, on_delete=models.CASCADE)
     bookedDateFrom = models.DateField('с:', default=django.utils.timezone.now())
     bookedDateTo = models.DateField('по:', default=django.utils.timezone.now())
+
     class Meta:
         verbose_name = 'Забронированная комната'
         verbose_name_plural = 'Забронированные комнаты'
 
-
     def __str__(self):
-        room = Room.objects.get(number=self.bookedRoomId)
-        print(room)
+        room = Room.objects.get(number=self.bookedRoom)
         return f'Комната №{room.number} забронирована пользователем {self.username}'

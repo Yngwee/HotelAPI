@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'main/main.css' %}">
+{% endblock %}
+{% block main %}
+    {% if num_rooms == 0 %}
+        <h1>Комнат нет</h1>
+    {% else %}
+        {% for room in my_rooms %}
+            <div class="room-blocks">
+                <div class="room-block">
+                    <h3>Комната {{ room.number }}</h3>
+                    <h4>Количество мест: {{ room.capacity }}</h4>
+                    <h4>Цена: {{ room.price }} рублей/сутки</h4>
+                    <p>{{ room.description }}</p>
+                    {% for i in booked_info %}
+                        {% if i.bookedRoom_id == room.id %}
+                            <p>Забронирован с {{ i.bookedDateFrom }}</p>
+                            <p> по {{ i.bookedDateTo }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    {% if request.user.is_authenticated %}
+                        <form action="/cancel/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="number_room" value="{{ room.number }}">
+                            <button type="submit">Отменить бронь</button>
+                            <br>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
